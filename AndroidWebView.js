@@ -212,6 +212,10 @@ class AndroidWebView extends Component {
      * @platform android
      */
     allowUniversalAccessFromFileURLs: PropTypes.bool,
+
+    mixedContentMode: PropTypes.string,
+    saveFormDataDisabled: PropTypes.bool,
+    thirdPartyCookiesEnabled: PropTypes.bool,
   };
 
   static defaultProps = {
@@ -358,6 +362,7 @@ class AndroidWebView extends Component {
         ref={(c) => { this[RCT_WEBVIEW_REF] = c; }}
         key="androidwebViewKey"
         style={webViewStyles}
+        mixedContentMode={this.props.mixedContentMode}
         source={resolveAssetSource(source)}
         scalesPageToFit={this.props.scalesPageToFit}
         injectedJavaScript={this.props.injectedJavaScript}
