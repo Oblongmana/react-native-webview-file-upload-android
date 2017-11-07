@@ -55,8 +55,7 @@ public class AndroidWebViewModule extends ReactContextBaseJavaModule implements 
     }
 
     @Override
-    public void onActivityResult(Activity activity, int requestCode, int resultCode, Intent data) {
-        // super.onActivityResult(requestCode, resultCode, data);
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == 1) {
             if (null == mUploadMessage && null == mUploadCallbackAboveL){
                 return;
@@ -70,6 +69,7 @@ public class AndroidWebViewModule extends ReactContextBaseJavaModule implements 
             }
         }
     }
+
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private void onActivityResultAboveL(int requestCode, int resultCode, Intent data) {
         if (requestCode != 1 || mUploadCallbackAboveL == null) {
