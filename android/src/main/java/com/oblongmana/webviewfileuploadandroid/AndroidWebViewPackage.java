@@ -15,17 +15,17 @@ public class AndroidWebViewPackage implements ReactPackage {
     private AndroidWebViewManager manager;
     private AndroidWebViewModule module;
 
-    @Override public List<Class<? extends JavaScriptModule>> createJSModules() {
+    public List<Class<? extends JavaScriptModule>> createJSModules() {
         return Collections.emptyList();
     }
 
-    @Override public List<ViewManager> createViewManagers(ReactApplicationContext reactContext) {
+    public List<ViewManager> createViewManagers(ReactApplicationContext reactContext) {
         manager = new AndroidWebViewManager();
         manager.setPackage(this);
         return Arrays.<ViewManager>asList(manager);
     }
 
-    @Override public List<NativeModule> createNativeModules( ReactApplicationContext reactContext) {
+    public List<NativeModule> createNativeModules( ReactApplicationContext reactContext) {
         List<NativeModule> modules = new ArrayList<>();
         module = new AndroidWebViewModule(reactContext);
         module.setPackage(this);

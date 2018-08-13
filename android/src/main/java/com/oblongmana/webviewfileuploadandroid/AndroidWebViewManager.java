@@ -68,10 +68,13 @@ public class AndroidWebViewManager extends ReactWebViewManager {
 
             private void openFileChooserView(){
                 try {
-                    final Intent galleryIntent = new Intent(Intent.ACTION_PICK);
-                    galleryIntent.setType("image/*");
+                    final Intent galleryIntent = new Intent(Intent.ACTION_GET_CONTENT);
+                    galleryIntent.addCategory(Intent.CATEGORY_OPENABLE);
+                    galleryIntent.setType("*/*");
+                    String[] extraMimeTypes = {"image/*", "video/*", "application/pdf"};
+                    galleryIntent.putExtra(Intent.EXTRA_MIME_TYPES, extraMimeTypes);
                     final Intent chooserIntent = Intent.createChooser(galleryIntent, "Choose File");
-                    module.getActivity().startActivityForResult(chooserIntent, 1);
+                    module.getActivity().startActivityForResult(Intent.createChooser(galleryIntent, "File Browser"), 1);
                 } catch (Exception e) {
                     Log.d("customwebview", e.toString());
                 }

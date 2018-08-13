@@ -10,8 +10,8 @@
  */
 import React, {
   Component,
-  PropTypes,
 } from 'react';
+import PropTypes from 'prop-types';
 import ReactNative, {
   EdgeInsetsPropType,
   ActivityIndicator,
@@ -81,14 +81,6 @@ const WebViewState = keyMirror({
   ERROR: null,
 });
 
-const defaultRenderLoading = () => (
-  <View style={styles.loadingView}>
-    <ActivityIndicator
-      style={styles.loadingProgressBar}
-    />
-  </View>
-);
-
 /**
  * Renders a native AndroidWebView that allows file upload.
  */
@@ -102,12 +94,15 @@ class AndroidWebView extends Component {
     onLoadStart: PropTypes.func,
     onError: PropTypes.func,
     automaticallyAdjustContentInsets: PropTypes.bool,
+    saveFormDataDisabled: PropTypes.bool,
+    thirdPartyCookiesEnabled: PropTypes.bool,
+    urlPrefixesForDefaultIntent: PropTypes.array,
+    mixedContentMode: PropTypes.string,
     contentInset: EdgeInsetsPropType,
     onNavigationStateChange: PropTypes.func,
     onMessage: PropTypes.func,
     onContentSizeChange: PropTypes.func,
     startInLoadingState: PropTypes.bool, // force WebView to show loadingView on first load
-    style: View.propTypes.style,
 
     html: deprecatedPropType(
       PropTypes.string,
@@ -222,14 +217,7 @@ class AndroidWebView extends Component {
   state = {
     viewState: WebViewState.IDLE,
     lastErrorEvent: null,
-    startInLoadingState: true,
   };
-
-  componentWillMount() {
-    if (this.props.startInLoadingState) {
-      this.setState({ viewState: WebViewState.LOADING });
-    }
-  }
 
   onLoadingStart = (event) => {
     const onLoadStart = this.props.onLoadStart;
@@ -319,19 +307,7 @@ class AndroidWebView extends Component {
   };
 
   render() {
-    let otherView = null;
-
-    if (this.state.viewState === WebViewState.LOADING) {
-      otherView = (this.props.renderLoading || defaultRenderLoading)();
-    } else if (this.state.viewState === WebViewState.ERROR) {
-      const errorEvent = this.state.lastErrorEvent;
-      otherView = this.props.renderError && this.props.renderError(
-              errorEvent.domain,
-              errorEvent.code,
-              errorEvent.description);
-    } else if (this.state.viewState !== WebViewState.IDLE) {
-      console.error(`RCTWebView invalid state encountered: ${this.state.loading}`);
-    }
+    const otherView = null;
 
     const webViewStyles = [styles.container, this.props.style];
     if (this.state.viewState === WebViewState.LOADING ||
@@ -381,7 +357,6 @@ class AndroidWebView extends Component {
     return (
       <View style={styles.container}>
         {webView}
-        {otherView}
       </View>
     );
   }
